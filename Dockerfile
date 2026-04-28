@@ -1,7 +1,7 @@
 # --------- Stage 1: Builder ---------
 
 # The official Docker image for Python3.12 with uv pre-installed
-FROM astral/uv:python3.12-bookworm-slim as builder
+FROM astral/uv:python3.12-bookworm-slim AS builder
 
 # Set environment variables for uv
 #   UV_COMPILE_BYTECODE=1   -> precompile Python source files to bytecode (cached .pyc files) at install time (faster cold start)
@@ -32,7 +32,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 # --------- Stage 2: Runtime ---------
 
 # Slim runtime image -- no uv, no build toolchain, just python + your venv
-FROM python:3.12-slim-bookworm as runtime
+FROM python:3.12-slim-bookworm AS runtime
 
 # Setup a non-root user
 RUN groupadd appgroup && useradd -g appgroup -s /bin/bash -m appuser
