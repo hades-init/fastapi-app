@@ -55,5 +55,8 @@ USER nonroot
 # Use `/app` as the working directory
 WORKDIR /app
 
+# The container will listen on port 8000 (only for documentation, port binding is in `compose.yml`)
+EXPOSE 8000
+
 # Run the FastAPI application by default
 CMD ["gunicorn", "app.main:app", "-c", "gunicorn.conf.py"]

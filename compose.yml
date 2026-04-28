@@ -1,11 +1,15 @@
 # Spin up two services: postgres database and the fastapi app, on a shared network.
 
+# ----- Services -----
 services:
 
+  # --- Postgresql ---
   postgres: 
     image: postgres:16-bookworm
     restart: unless-stopped
-    # Named volume to persist data on container restarts
+    # Named volume to persist data across container restarts.
+    # It persists across: docker compose down, container rebuilds, image updates
+    # It is ONLY deleted by: docker compose down -v  or  docker volume rm
     volumes: 
       - postgres-data:/var/lib/postgres/data
     env_file:
@@ -23,12 +27,14 @@ services:
       retries: 3
     # Only expose to host if you want to connect with a local psql/pgAdmin. Comment out in production.
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
   
-  app:
+  # --- FastAPI Application ---
+  api:
     build:
       context: .
       dockerfile: Dockerfile
+      target: production
     image: fastapi-app:latest
     restart: unless-stopped
     depends-on:
@@ -38,7 +44,7 @@ services:
       - .env
     environment:
       # Override POSTGRES_SERVER so the app talks to the `postgres` service over the
-      # compose network, NOT to localhost (which inside the container is itself).
+      # compose network, NOT to localhost (which is inside the container itself).
       POSTGRES_SERVER: postgres
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health-check"]
@@ -53,5 +59,9 @@ services:
       sh -c "alembic upgrade head &&
              exec gunicorn app.main:app -c gunicorn.conf.py"
 
+
+# ----- Named Volumes -----
 volumes:
-  postgres_data:
+  postgres-data:
+    # Docker manages this volume — data lives at /var/lib/docker/volumes/
+
