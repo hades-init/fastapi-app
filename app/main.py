@@ -37,7 +37,7 @@ app.include_router(posts.router)
 app.include_router(users.router)
 app.include_router(vote.router)
 
-# Get root
-@app.get("/")
-def root():
-    return {"message": "Hello World!"}
+# Health-check
+@app.get("/health-check")
+def health_check():
+    return {"status": "Ok"}
