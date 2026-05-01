@@ -10,6 +10,9 @@ The API is documented with Swagger UI out of the box at [`http://localhost:8000/
 - **Posts** — create, read, update, and delete posts
 - **Votes** — like / unlike posts; vote counts returned with each post
 
+<img width="1890" height="1245" alt="Screenshot 2026-05-01 at 8 39 35 PM" src="https://github.com/user-attachments/assets/5f7de5d6-5bbc-4cea-81f4-f6b25bfd2f2f" />
+
+
 ## Tech Stack
 
 - **Python** 3.12
